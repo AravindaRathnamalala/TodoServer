@@ -1,24 +1,23 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const Todo = require("./models/todo.model");
+const todoRoute = require("./routes/todo.routes")
 
 const app = express();
+
+//middleware
 app.use(express.json());
+
+//route
+app.use("/api/todos", todoRoute)
 
 app.get("/", function (req, res) {
   res.send("Hello World gyth");
 });
 
-app.get("/api/todos", async (req, res) => {
-  try {
-    const todos = await Todo.find({});
-    res.status(200).json(todos);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-});
 
-app.get("/api/todo/:id", async (req, res) => {
+
+app.get("/api/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const todo = await Todo.findById(id);
@@ -37,7 +36,7 @@ app.post("/api/todos", async (req, res) => {
   }
 });
 
-app.put("/api/todo/:id", async (req, res) => {
+app.put("/api/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const todo = await Todo.findByIdAndUpdate(id, req.body);
@@ -50,7 +49,7 @@ app.put("/api/todo/:id", async (req, res) => {
   }
 });
 
-app.delete("/api/todo/:id", async (req, res) => {
+app.delete("/api/todos/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const todo = await Todo.findByIdAndDelete(id);
